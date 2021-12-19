@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+// The restaurant service definition.
+service Restaurant {
+  // Sends a order request
+  rpc FoodOrder (RestaurantRequest) returns (RestaurantResponse) {}
+  rpc DrinkOrder (RestaurantRequest) returns (RestaurantResponse) {}
+  rpc DessertOrder (RestaurantRequest) returns (RestaurantResponse) {}
+}
+
+// The request message containing the orderID and a list of order items
+message RestaurantRequest {
+  string orderID = 1;
+  repeated string items = 2;
+}
+
+// The response message containing the order ID and a status
+message RestaurantResponse {
+  string orderID = 1;
+  enum Status {
+    ACCEPTED = 0;
+    REJECTED = 1;
+  }
+  Status status = 2;
+}
