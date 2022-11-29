@@ -1,0 +1,222 @@
+openapi: 3.0.0
+info:
+  title: Photo API
+  version: '0.0.1'
+  description: Assignment of API design with OpenAPI
+
+paths:
+  /photo:
+    post:
+      summary: Create a photo
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Photo'
+      responses:
+        '201':
+          description: Return success message or error message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /photo/{photo_id}:
+    get:
+      summary: Get a specific photo.
+      parameters:
+        - in: path
+          name: photo_id
+          schema:
+            type: string
+          required: true
+          description: Get the photo through the id string.
+      responses:
+        '200':
+          description: Return the photo object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photo'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: err
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a specific photo
+      parameters:
+        - in: path
+          name: photo_id
+          schema:
+            type: string
+          required: true
+          description: Get the photo through the id string.
+      responses:
+        '204':
+          description: Delete success
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: err
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: update the photo.
+      parameters:
+        - in: path
+          name: photo_id
+          schema:
+            type: string
+          required: true
+          description: Get the photo through the id string.
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Photo'
+      responses:
+        '200':
+          description: Photo successfully updated’
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'      
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /photos:
+    get:
+      summary: get all the photo objects.
+      parameters:
+        - in: query
+          name: access
+          schema:
+            type: string
+          required: true
+          description: to get all the photo object
+      responses:
+        '200':
+          description: get all the photo objects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Photos'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Photo:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 20
+        description:
+          type: string
+          maxLength: 100
+        access:
+          type: string
+          enum:
+            - public
+            - private
+        location:
+          type: string
+        file:
+          type: string       
+        created_date:
+          type: string
+          format: data-time
+        modified_date:
+          type: string
+          format: data-time
+      required:
+        - name
+        - access
+        - location
+        - file
+        - created_date
+        - modified_date
+    Photos:
+      type: array
+      description: An array of photos
+      items:
+        type: object
+    Success:
+      type: object
+      properties:
+        message:
+          type: string
+        id:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      
+    
+    
+    
+
